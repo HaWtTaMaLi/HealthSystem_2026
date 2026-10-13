@@ -9,6 +9,7 @@ namespace HealthSystem_2026
         static int currHealth; //Players current health
         static string healthStatus; //The status of the players health
         
+        
         //SHIELD
         static int shield; //Default shield
         static int currShield; //Players current health
@@ -31,7 +32,7 @@ namespace HealthSystem_2026
             //HEALTH
             health = 100;
             currHealth = health;
-            healthStatus = "Perfect Health";
+            //healthStatus = "Perfect Health";
 
             //SHIELD
             shield = 100;
@@ -42,12 +43,23 @@ namespace HealthSystem_2026
             currLives = lives;
 
             ShowHUD();
-            TakeDamage(110);
+            TakeDamage(60);
+            ShowHUD();
+            TakeDamage(50);
+            ShowHUD();
+            TakeDamage(20);
+            ShowHUD();
+            TakeDamage(30);
+            ShowHUD();
+            TakeDamage(30);
             ShowHUD();
         }
 
         static void ShowHUD()
         {
+            //Update status
+            UpdateHealthStatus();
+
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("\n--- HUD ---");
 
@@ -108,6 +120,51 @@ namespace HealthSystem_2026
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine(" damage.");
             #endregion
+        }
+
+        static void Heal(int hp)
+        {
+            //is the player alive?
+            if (isAlive == false)
+            {
+                Console.WriteLine("\nYou can't heal the dead.");
+                return;
+            }
+
+
+                currHealth += hp;
+
+
+            //dont allow health to go above 100
+
+        }
+
+        static void UpdateHealthStatus()
+        {
+            if (currHealth < 11)
+            {
+                healthStatus = "Imminent danager";
+            }
+            else if (currHealth < 51)
+            {
+                healthStatus = "Badly Hurt";
+            }
+            else if (currHealth < 76)
+            {
+                healthStatus = "Hurt";
+            }
+            else if (currHealth < 91)
+            {
+                healthStatus = "Injured";
+            }
+            else if (currHealth < 99)
+            {
+                healthStatus = "Healthy";
+            }
+            else
+            {
+                healthStatus = "perfect health";
+            }
         }
     }
 }
