@@ -9,7 +9,6 @@ namespace HealthSystem_2026
         static int currHealth; //Players current health
         static string healthStatus; //The status of the players health
         
-        
         //SHIELD
         static int shield; //Default shield
         static int currShield; //Players current health
@@ -52,6 +51,10 @@ namespace HealthSystem_2026
             TakeDamage(30);
             ShowHUD();
             TakeDamage(30);
+            ShowHUD();
+            Heal(80);
+            ShowHUD();
+            Heal(20);
             ShowHUD();
         }
 
@@ -131,12 +134,36 @@ namespace HealthSystem_2026
                 return;
             }
 
-
+            if (currHealth > 100)
+            {
                 currHealth += hp;
 
+                #region You Healed
+                Console.Write("\nyou healed ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write(hp);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(" health.");
+                #endregion
+            }
+            else
+            {
+                currHealth = health;
+
+                #region Can't Heal
+                Console.Write("\nYou tried to heal ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write(hp);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(" health,");
+                Console.WriteLine("your health is at max!");
+                #endregion
+
+            }
+
+            //this isnt right ....
 
             //dont allow health to go above 100
-
         }
 
         static void UpdateHealthStatus()
