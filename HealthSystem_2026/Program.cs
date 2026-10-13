@@ -53,7 +53,7 @@ namespace HealthSystem_2026
 
             #region Lives
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write("Lives: ");
+            Console.Write("Lives : ");
             Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine(currLives);
             Console.ForegroundColor = ConsoleColor.DarkYellow;
