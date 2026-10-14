@@ -43,7 +43,7 @@ namespace HealthSystem_2026
             currLives = lives;
             livesToDeplete = 1;
 
-            //Take Damage
+            //Take Damage to show health status
             ShowHUD();
             TakeDamage(60);
             ShowHUD();
@@ -58,14 +58,20 @@ namespace HealthSystem_2026
             TakeDamage(30);
             ShowHUD();
 
-            //Heal
+            //Heal on full health
             Heal(40);
             ShowHUD();
 
-            //Regen
+            //Regen on full shield
             RegenShield(20);
             ShowHUD();
 
+            OneUp();
+            ShowHUD();
+
+            //OnUP on full lives
+            OneUp();
+            ShowHUD();
         }
 
         static void ShowHUD()
@@ -116,6 +122,14 @@ namespace HealthSystem_2026
 
             currShield -= dmg;
 
+            #region You Took Damage
+            Console.Write("\nyou took ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write(dmg);
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine(" damage.");
+            #endregion
+
             if (currShield < 0)
             {
                 //store the remaining number
@@ -126,14 +140,6 @@ namespace HealthSystem_2026
 
                 //Cap the shield
                 currShield = 0;
-
-                #region You Took Damage
-                Console.Write("\nyou took ");
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.Write(dmg);
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine(" damage.");
-                #endregion
 
                 if(currHealth < 0)
                 {
@@ -161,7 +167,12 @@ namespace HealthSystem_2026
                 currHealth = health;
 
                 #region Max Health
-                Console.WriteLine("\nyour health is at max!");
+                Console.Write("\nyou tried to heal ");
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(hp);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(" health.");
+                Console.WriteLine("your health is at max!");
                 #endregion
             }
 
@@ -176,7 +187,6 @@ namespace HealthSystem_2026
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine(" health.");
                 #endregion
-
             }
         }
 
@@ -194,7 +204,12 @@ namespace HealthSystem_2026
                 currShield = shield;
 
                 #region Max Shield
-                Console.WriteLine("\nyour shield is at max!");
+                Console.Write("\nyou tried to regen ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write(sp);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(" shield.");
+                Console.WriteLine("your shield is at max!");
                 #endregion
             }
 
@@ -209,7 +224,6 @@ namespace HealthSystem_2026
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine(" shield.");
                 #endregion
-
             }
         }
 
@@ -220,7 +234,44 @@ namespace HealthSystem_2026
             currLives -= livesToDeplete;
             currHealth = health;
             currShield = shield;
-            Console.WriteLine("\nYou have been revived. " + currLives + " lives left.");
+
+            #region Revive Lives
+            Console.Write("\nYou have been revived. ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write(currLives);
+            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.WriteLine(" lives left.");
+            #endregion
+        }
+
+        static void OneUp()
+        {
+
+            if (currLives >= lives)
+            {
+                currLives = lives;
+
+                #region Max Lives
+                Console.Write("\nyou tried to gain ");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write(livesToDeplete);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(" life.");
+                Console.WriteLine("your lives are at max!");
+                #endregion
+            }
+            else
+            {
+                currLives += livesToDeplete;
+
+                #region One Up life
+                Console.Write("\nYou gained a life. ");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write(currLives);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(" lives left.");
+                #endregion
+            }
         }
 
         static void UpdateHealthStatus()
