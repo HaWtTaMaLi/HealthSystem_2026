@@ -16,6 +16,7 @@ namespace HealthSystem_2026
         //LIVES
         static int lives; //Default lives
         static int currLives; //Players current lives
+        static int livesToDeplete;
 
         //Is the player alive?
         static bool isAlive;
@@ -40,6 +41,7 @@ namespace HealthSystem_2026
             //LIVES
             lives = 3;
             currLives = lives;
+            livesToDeplete = 1;
 
             //Take Damage
             ShowHUD();
@@ -139,7 +141,7 @@ namespace HealthSystem_2026
                     //dead
                     currHealth = 0;
                     isAlive = false;
-                    //Revive();
+                    Revive();
                 }
             }
         }
@@ -166,7 +168,7 @@ namespace HealthSystem_2026
                 #endregion
 
                 //dont allow health to go above 100
-                if (currHealth > 100)
+                if (currHealth >= 100)
                 {
                     currHealth = health;
 
@@ -198,7 +200,7 @@ namespace HealthSystem_2026
                 #endregion
 
                 //dont allow shield to go above 100
-                if (currShield > 100)
+                if (currShield >= 100)
                 {
                     currShield = shield;
 
@@ -207,6 +209,16 @@ namespace HealthSystem_2026
                     #endregion
                 }
             }
+        }
+
+        static void Revive()
+        {
+            //bring the dead back to life
+            isAlive = true;
+            currLives -= livesToDeplete;
+            currHealth = health;
+            currShield = shield;
+            Console.WriteLine("\nYou have been revived. " + currLives + " lives left.");
         }
 
         static void UpdateHealthStatus()
