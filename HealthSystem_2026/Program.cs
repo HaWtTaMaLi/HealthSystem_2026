@@ -155,6 +155,16 @@ namespace HealthSystem_2026
                 return;
             }
 
+            //dont allow health to go above 100
+            if (currHealth >= 100)
+            {
+                currHealth = health;
+
+                #region Max Health
+                Console.WriteLine("\nyour health is at max!");
+                #endregion
+            }
+
             if (currHealth < 100)
             {
                 currHealth += hp;
@@ -167,15 +177,6 @@ namespace HealthSystem_2026
                 Console.WriteLine(" health.");
                 #endregion
 
-                //dont allow health to go above 100
-                if (currHealth >= 100)
-                {
-                    currHealth = health;
-
-                    #region Max Health
-                    Console.WriteLine("\nyour health is at max!");
-                    #endregion
-                }
             }
         }
 
@@ -185,6 +186,16 @@ namespace HealthSystem_2026
             {
                 Console.WriteLine("\nYou can't regen the shield of the dead.");
                 return;
+            }
+
+            //dont allow shield to go above 100
+            if (currShield >= 100)
+            {
+                currShield = shield;
+
+                #region Max Shield
+                Console.WriteLine("\nyour shield is at max!");
+                #endregion
             }
 
             if (currShield < 100)
@@ -199,15 +210,6 @@ namespace HealthSystem_2026
                 Console.WriteLine(" shield.");
                 #endregion
 
-                //dont allow shield to go above 100
-                if (currShield >= 100)
-                {
-                    currShield = shield;
-
-                    #region Max Shield
-                    Console.WriteLine("\nyour shield is at max!");
-                    #endregion
-                }
             }
         }
 
