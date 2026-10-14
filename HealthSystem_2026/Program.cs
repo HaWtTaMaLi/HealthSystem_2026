@@ -52,10 +52,15 @@ namespace HealthSystem_2026
             ShowHUD();
             TakeDamage(30);
             ShowHUD();
-            Heal(70);
+            Heal(40);
             ShowHUD();
             Heal(40);
             ShowHUD();
+            Heal(20);
+            ShowHUD();
+            RegenShield(20);
+            ShowHUD();
+
         }
 
         static void ShowHUD()
@@ -104,11 +109,10 @@ namespace HealthSystem_2026
                 return; 
             }
 
+            currShield -= dmg;
 
-            if (currShield > 0)
+            if (currShield < 0)
             {
-                currShield -= dmg;
-
                 //store the remaining number
                 int remainingDMG = -currShield;
 
@@ -118,18 +122,15 @@ namespace HealthSystem_2026
                 //Cap the shield
                 currShield = 0;
             }
-            else
-            {
-                currHealth -= dmg;
-            }
 
-                #region You Took Damage
-                Console.Write("\nyou took ");
+            #region You Took Damage
+            Console.Write("\nyou took ");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write(dmg);
             Console.ForegroundColor = ConsoleColor.Gray;
             Console.WriteLine(" damage.");
             #endregion
+
         }
 
         static void Heal(int hp)
@@ -141,7 +142,7 @@ namespace HealthSystem_2026
                 return;
             }
 
-            if (currHealth > 100)
+            if (currHealth < 100)
             {
                 currHealth += hp;
 
@@ -152,25 +153,47 @@ namespace HealthSystem_2026
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine(" health.");
                 #endregion
-            }
-            else
-            {
-                currHealth = health;
 
-                #region Can't Heal
-                Console.Write("\nYou tried to heal ");
+                //dont allow health to go above 100
+                if (currHealth > 100)
+                {
+                    currHealth = health;
+
+                    #region Max Health
+                    Console.WriteLine("\nyour health is at max!");
+                    #endregion
+                }
+            }
+        }
+
+        static void RegenShield(int sp)
+        {
+            if (isAlive == false)
+            {
+                Console.WriteLine("\nYou can't regen the shield of the dead.");
+                return;
+            }
+
+            if (currShield < 100)
+            {
+                currShield += sp;
+
+                #region You Regenerated
+                Console.Write("\nyou regenerated ");
                 Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write(hp);
+                Console.Write(sp);
                 Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine(" health,");
-                Console.WriteLine("your health is at max!");
+                Console.WriteLine(" shield.");
                 #endregion
 
+                if (currShield > 100)
+                {
+                    currShield = shield;
+                    #region Max Shield
+                    Console.WriteLine("\nyour shield is at max!");
+                    #endregion
+                }
             }
-
-            //this isnt right .... for some reason 10 health healing 70 = 100??????
-
-            //dont allow health to go above 100
         }
 
         static void UpdateHealthStatus()
