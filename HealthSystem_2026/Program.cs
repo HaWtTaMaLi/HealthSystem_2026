@@ -41,6 +41,7 @@ namespace HealthSystem_2026
             lives = 3;
             currLives = lives;
 
+            //Take Damage
             ShowHUD();
             TakeDamage(60);
             ShowHUD();
@@ -52,12 +53,14 @@ namespace HealthSystem_2026
             ShowHUD();
             TakeDamage(30);
             ShowHUD();
+            TakeDamage(30);
+            ShowHUD();
+
+            //Heal
             Heal(40);
             ShowHUD();
-            Heal(40);
-            ShowHUD();
-            Heal(20);
-            ShowHUD();
+
+            //Regen
             RegenShield(20);
             ShowHUD();
 
@@ -121,16 +124,24 @@ namespace HealthSystem_2026
 
                 //Cap the shield
                 currShield = 0;
+
+                #region You Took Damage
+                Console.Write("\nyou took ");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write(dmg);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(" damage.");
+                #endregion
+
+                if(currHealth < 0)
+                {
+                    Console.WriteLine("\nYou died.");
+                    //dead
+                    currHealth = 0;
+                    isAlive = false;
+                    //Revive();
+                }
             }
-
-            #region You Took Damage
-            Console.Write("\nyou took ");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.Write(dmg);
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine(" damage.");
-            #endregion
-
         }
 
         static void Heal(int hp)
@@ -186,9 +197,11 @@ namespace HealthSystem_2026
                 Console.WriteLine(" shield.");
                 #endregion
 
+                //dont allow shield to go above 100
                 if (currShield > 100)
                 {
                     currShield = shield;
+
                     #region Max Shield
                     Console.WriteLine("\nyour shield is at max!");
                     #endregion
@@ -198,7 +211,11 @@ namespace HealthSystem_2026
 
         static void UpdateHealthStatus()
         {
-            if (currHealth < 11)
+            if(currHealth == 0)
+            {
+                healthStatus = "Dead";
+            }
+            else if (currHealth < 11)
             {
                 healthStatus = "Imminent danager";
             }
