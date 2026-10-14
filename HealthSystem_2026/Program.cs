@@ -52,9 +52,9 @@ namespace HealthSystem_2026
             ShowHUD();
             TakeDamage(30);
             ShowHUD();
-            Heal(80);
+            Heal(70);
             ShowHUD();
-            Heal(20);
+            Heal(40);
             ShowHUD();
         }
 
@@ -104,20 +104,27 @@ namespace HealthSystem_2026
                 return; 
             }
 
-            currShield -= dmg;
 
-            if (currShield <= 0)
+            if (currShield > 0)
             {
+                currShield -= dmg;
+
                 //store the remaining number
                 int remainingDMG = -currShield;
+
                 //remove remainign numbers from health
                 currHealth -= remainingDMG;
+
                 //Cap the shield
                 currShield = 0;
             }
+            else
+            {
+                currHealth -= dmg;
+            }
 
-            #region You Took Damage
-            Console.Write("\nyou took ");
+                #region You Took Damage
+                Console.Write("\nyou took ");
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write(dmg);
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -161,7 +168,7 @@ namespace HealthSystem_2026
 
             }
 
-            //this isnt right ....
+            //this isnt right .... for some reason 10 health healing 70 = 100??????
 
             //dont allow health to go above 100
         }
