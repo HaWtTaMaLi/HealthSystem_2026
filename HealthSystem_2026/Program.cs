@@ -55,6 +55,8 @@ namespace HealthSystem_2026
             ShowHUD();
             TakeDamage(30);
             ShowHUD();
+
+            //You Died
             TakeDamage(30);
             ShowHUD();
 
@@ -66,6 +68,7 @@ namespace HealthSystem_2026
             RegenShield(20);
             ShowHUD();
 
+            //OneUp
             OneUp();
             ShowHUD();
 
