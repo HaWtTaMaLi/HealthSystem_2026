@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace HealthSystem_2026
 {
@@ -42,6 +43,9 @@ namespace HealthSystem_2026
             lives = 3;
             currLives = lives;
             livesToDeplete = 1;
+
+            //Unit Test Health System
+            UnitTestHealhtSystem();
 
             //Take Damage to show health status
             ShowHUD();
@@ -307,6 +311,86 @@ namespace HealthSystem_2026
             {
                 healthStatus = "perfect health";
             }
+        }
+
+        static void UnitTestHealhtSystem()
+        {
+
+            //TakeDamage()
+            #region Take Damage
+
+            //Shield only
+            currShield = 100;
+            currHealth = 100;
+            currLives = 3;
+            TakeDamage(10);
+
+            Debug.Assert(currShield == 90);
+            Debug.Assert(currHealth == 100);
+            Debug.Assert(currLives == 3);
+
+            //Health only
+            currShield = 0;
+            currHealth = 100;
+            currLives = 3;
+            TakeDamage(50);
+
+            Debug.Assert(currShield == 0);
+            Debug.Assert(currHealth == 50);
+            Debug.Assert(currLives == 3);
+
+            //Shield and Health
+            currShield = 10;
+            currHealth = 100;
+            currLives = 3;
+            TakeDamage(50);
+
+            Debug.Assert(currShield == 0);
+            Debug.Assert(currHealth == 60);
+            Debug.Assert(currLives == 3);
+
+            //Health and lives
+            currShield = 0;
+            currHealth = 10;
+            currLives = 3;
+            TakeDamage(25);
+
+            Debug.Assert(currShield == 100);
+            Debug.Assert(currHealth == 100);
+            Debug.Assert(currLives == 2);
+
+            //Shield health and lives
+            currShield = 5;
+            currHealth = 100;
+            currLives = 3;
+            TakeDamage(110);
+
+            Debug.Assert(currShield == 100);
+            Debug.Assert(currHealth == 100);
+            Debug.Assert(currLives == 2);
+
+            //Negative Input
+            shield = 50;
+            health = 50;
+            lives = 3;
+            TakeDamage(-10);
+
+            Debug.Assert(shield == 50);
+            Debug.Assert(health == 50);
+            Debug.Assert(lives == 3);
+            #endregion
+
+            //Heal()
+
+            //RegenShield()
+
+            //Revive()
+
+            //OneUp()
+
+            //Bottom of test
+            Console.Clear();
+            Console.WriteLine("Unit test for Health System completed.");
         }
     }
 }
