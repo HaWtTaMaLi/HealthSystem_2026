@@ -127,6 +127,15 @@ namespace HealthSystem_2026
                 return; 
             }
 
+            //dmg cant be negative
+            if(dmg < 0)
+            {
+                dmg = 0;
+                Console.WriteLine("You cant deal negative damage.");
+                return;
+            }
+
+            //shield takes damage first
             currShield -= dmg;
 
             #region You Took Damage
@@ -137,6 +146,7 @@ namespace HealthSystem_2026
             Console.WriteLine(" damage.");
             #endregion
 
+            //if current shield is less then 0 
             if (currShield < 0)
             {
                 //store the remaining number
@@ -168,6 +178,19 @@ namespace HealthSystem_2026
                 return;
             }
 
+            if (currHealth < 100)
+            {
+                currHealth += hp;
+
+                #region You Healed
+                Console.Write("\nyou healed ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write(hp);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(" health.");
+                #endregion
+            }
+
             //dont allow health to go above 100
             if (currHealth >= 100)
             {
@@ -182,19 +205,6 @@ namespace HealthSystem_2026
                 Console.WriteLine("your health is at max!");
                 #endregion
             }
-
-            if (currHealth < 100)
-            {
-                currHealth += hp;
-
-                #region You Healed
-                Console.Write("\nyou healed ");
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write(hp);
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine(" health.");
-                #endregion
-            }
         }
 
         static void RegenShield(int sp)
@@ -203,6 +213,19 @@ namespace HealthSystem_2026
             {
                 Console.WriteLine("\nYou can't regen the shield of the dead.");
                 return;
+            }
+
+            if (currShield < 100)
+            {
+                currShield += sp;
+
+                #region You Regenerated
+                Console.Write("\nyou regenerated ");
+                Console.ForegroundColor = ConsoleColor.Cyan;
+                Console.Write(sp);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(" shield.");
+                #endregion
             }
 
             //dont allow shield to go above 100
@@ -217,19 +240,6 @@ namespace HealthSystem_2026
                 Console.ForegroundColor = ConsoleColor.Gray;
                 Console.WriteLine(" shield.");
                 Console.WriteLine("your shield is at max!");
-                #endregion
-            }
-
-            if (currShield < 100)
-            {
-                currShield += sp;
-
-                #region You Regenerated
-                Console.Write("\nyou regenerated ");
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.Write(sp);
-                Console.ForegroundColor = ConsoleColor.Gray;
-                Console.WriteLine(" shield.");
                 #endregion
             }
         }
@@ -370,26 +380,108 @@ namespace HealthSystem_2026
             Debug.Assert(currLives == 2);
 
             //Negative Input
-            shield = 50;
-            health = 50;
-            lives = 3;
+            currShield = 50;
+            currHealth = 50;
+            currLives = 3;
             TakeDamage(-10);
 
-            Debug.Assert(shield == 50);
-            Debug.Assert(health == 50);
-            Debug.Assert(lives == 3);
+            Debug.Assert(currShield == 50);
+            Debug.Assert(currHealth == 50);
+            Debug.Assert(currLives == 3);
+            Console.Clear();
             #endregion
 
             //Heal()
+            #region Heal
+
+            //Health only
+            currShield = 10;
+            currHealth = 50;
+            currLives = 3;
+            Heal(10);
+
+            Debug.Assert(currShield == 10);
+            Debug.Assert(currHealth == 60);
+            Debug.Assert(currLives == 3);
+
+            //max health
+            currShield = 10;
+            currHealth = 50;
+            currLives = 3;
+            Heal(60);
+
+            Debug.Assert(currShield == 10);
+            Debug.Assert(currHealth == 100);
+            Debug.Assert(currLives == 3);
+            Console.Clear();
+            #endregion
 
             //RegenShield()
+            #region Regen shield
+
+            //shield only
+            currShield = 10;
+            currHealth = 90;
+            currLives = 3;
+            RegenShield(50);
+
+            Debug.Assert(currShield == 60);
+            Debug.Assert(currHealth == 90);
+            Debug.Assert(currLives == 3);
+
+            //max shield
+            currShield = 90;
+            currHealth = 100;
+            currLives = 3;
+            RegenShield(20);
+
+            Debug.Assert(currShield == 100);
+            Debug.Assert(currHealth == 100);
+            Debug.Assert(currLives == 3);
+            Console.Clear();
+            #endregion
 
             //Revive()
+            #region Revive
+
+            //lives shield and health
+            currShield = 0;
+            currHealth = 0;
+            currLives = 3;
+            Revive();
+
+            Debug.Assert(currShield == 100);
+            Debug.Assert(currHealth == 100);
+            Debug.Assert(currLives == 2);
+            Console.Clear();
+            #endregion
 
             //OneUp()
+            #region One Up
+
+            //Lives only
+            currShield = 100;
+            currHealth = 100;
+            currLives = 2;
+            OneUp();
+
+            Debug.Assert(currShield == 100);
+            Debug.Assert(currHealth == 100);
+            Debug.Assert(currLives == 3);
+
+            //max OneUp
+            currShield = 100;
+            currHealth = 100;
+            currLives = 3;
+            OneUp();
+
+            Debug.Assert(currShield == 100);
+            Debug.Assert(currHealth == 100);
+            Debug.Assert(currLives == 3);
+            Console.Clear();
+            #endregion
 
             //Bottom of test
-            Console.Clear();
             Console.WriteLine("Unit test for Health System completed.");
         }
     }
