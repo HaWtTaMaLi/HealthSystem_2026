@@ -6,46 +6,32 @@ namespace HealthSystem_2026
     internal class Program
     {
         //HEALTH
-        static int health; //Default health
+        static int maxHealth = 100; //Default health
         static int currHealth; //Players current health
         static string healthStatus; //The status of the players health
         
         //SHIELD
-        static int shield; //Default shield
+        static int maxShield = 100; //Default shield
         static int currShield; //Players current health
 
         //LIVES
-        static int lives; //Default lives
+        static int baselives = 3; //Default lives
         static int currLives; //Players current lives
-        static int livesToDeplete;
+        static int livesToDeplete = 1;
 
         //Is the player alive?
         static bool isAlive;
 
         static void Main()
         {
+            //Unit Test Health System
+            UnitTestHealhtSystem();
+
             //COLOUR
             Console.ForegroundColor = ConsoleColor.Gray;
 
-            //ALIVE?
-            isAlive = true;
-
-            //HEALTH
-            health = 100;
-            currHealth = health;
-            //healthStatus = "Perfect Health";
-
-            //SHIELD
-            shield = 100;
-            currShield = shield;
-
-            //LIVES
-            lives = 3;
-            currLives = lives;
-            livesToDeplete = 1;
-
-            //Unit Test Health System
-            UnitTestHealhtSystem();
+            //reset stats
+            ResetGame();
 
             //Take Damage to show health status
             ShowHUD();
@@ -62,6 +48,10 @@ namespace HealthSystem_2026
 
             //You Died
             TakeDamage(30);
+            ShowHUD();
+
+            //Revive
+            Revive();
             ShowHUD();
 
             //Heal on full health
@@ -120,6 +110,11 @@ namespace HealthSystem_2026
 
         static void TakeDamage(int dmg)
         {
+            // currShield = 5;
+            // currHealth = 100;
+            // currLives = 3;
+            // TakeDamage(110);
+
             //is the player alive?
             if (isAlive == false) 
             {
@@ -164,7 +159,7 @@ namespace HealthSystem_2026
                     //dead
                     currHealth = 0;
                     isAlive = false;
-                    Revive();
+                    //Revive();
                 }
             }
         }
@@ -194,7 +189,7 @@ namespace HealthSystem_2026
             //dont allow health to go above 100
             if (currHealth >= 100)
             {
-                currHealth = health;
+                currHealth = maxHealth;
 
                 #region Max Health
                 Console.Write("\nyou tried to heal ");
@@ -231,7 +226,7 @@ namespace HealthSystem_2026
             //dont allow shield to go above 100
             if (currShield >= 100)
             {
-                currShield = shield;
+                currShield = maxShield;
 
                 #region Max Shield
                 Console.Write("\nyou tried to regen ");
@@ -246,27 +241,48 @@ namespace HealthSystem_2026
 
         static void Revive()
         {
-            //bring the dead back to life
-            isAlive = true;
-            currLives -= livesToDeplete;
-            currHealth = health;
-            currShield = shield;
+            //if we already have 3 lives
+            if (isAlive == true)
+            {
+                Console.WriteLine("\nYou can't revive those who are already alive.");
+                return;
+            }
 
-            #region Revive Lives
-            Console.Write("\nYou have been revived. ");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write(currLives);
-            Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine(" lives left.");
-            #endregion
+            //if lives are less then or equal to 0
+            if(currLives <= 0)
+            {
+                isAlive = false;
+                return;
+            }
+            else
+            {
+                //bring the dead back to life
+                isAlive = true;
+                currLives -= livesToDeplete;
+                currHealth = maxHealth;
+                currShield = maxShield;
+
+                #region Revive Lives
+                Console.Write("\nYou have been revived. ");
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.Write(currLives);
+                Console.ForegroundColor = ConsoleColor.Gray;
+                Console.WriteLine(" lives left.");
+                #endregion
+            }
         }
 
         static void OneUp()
         {
-
-            if (currLives >= lives)
+            if (isAlive == false)
             {
-                currLives = lives;
+                Console.WriteLine("\nYou can't give lives to dead people.");
+                return;
+            }
+
+            if (currLives >= baselives)
+            {
+                currLives = baselives;
 
                 #region Max Lives
                 Console.Write("\nyou tried to gain ");
@@ -323,6 +339,18 @@ namespace HealthSystem_2026
             }
         }
 
+        static void ResetGame()
+        {
+            //ALIVE?
+            isAlive = true;
+            //HEALTH
+            currHealth = maxHealth;
+            //SHIELD
+            currShield = maxShield;
+            //LIVE
+            currLives = baselives;
+        }
+
         static void UnitTestHealhtSystem()
         {
 
@@ -330,64 +358,77 @@ namespace HealthSystem_2026
             #region Take Damage
 
             //Shield only
+            isAlive = true;
             currShield = 100;
             currHealth = 100;
             currLives = 3;
             TakeDamage(10);
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 90);
             Debug.Assert(currHealth == 100);
             Debug.Assert(currLives == 3);
 
             //Health only
+            isAlive = true;
             currShield = 0;
             currHealth = 100;
             currLives = 3;
             TakeDamage(50);
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 0);
             Debug.Assert(currHealth == 50);
             Debug.Assert(currLives == 3);
 
             //Shield and Health
+            isAlive = true;
             currShield = 10;
             currHealth = 100;
             currLives = 3;
             TakeDamage(50);
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 0);
             Debug.Assert(currHealth == 60);
             Debug.Assert(currLives == 3);
 
             //Health and lives
+            isAlive = true;
             currShield = 0;
             currHealth = 10;
             currLives = 3;
             TakeDamage(25);
 
-            Debug.Assert(currShield == 100);
-            Debug.Assert(currHealth == 100);
-            Debug.Assert(currLives == 2);
+            Debug.Assert(isAlive == false);
+            Debug.Assert(currShield == 0);
+            Debug.Assert(currHealth == 0);
+            Debug.Assert(currLives == 3);
 
             //Shield health and lives
+            isAlive = true;
             currShield = 5;
             currHealth = 100;
             currLives = 3;
             TakeDamage(110);
 
-            Debug.Assert(currShield == 100);
-            Debug.Assert(currHealth == 100);
-            Debug.Assert(currLives == 2);
+            Debug.Assert(isAlive == false);
+            Debug.Assert(currShield == 0);
+            Debug.Assert(currHealth == 0);
+            Debug.Assert(currLives == 3);
 
             //Negative Input
+            isAlive = true;
             currShield = 50;
             currHealth = 50;
             currLives = 3;
             TakeDamage(-10);
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 50);
             Debug.Assert(currHealth == 50);
             Debug.Assert(currLives == 3);
+
             Console.Clear();
             #endregion
 
@@ -395,24 +436,41 @@ namespace HealthSystem_2026
             #region Heal
 
             //Health only
+            isAlive = true;
             currShield = 10;
             currHealth = 50;
             currLives = 3;
             Heal(10);
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 10);
             Debug.Assert(currHealth == 60);
             Debug.Assert(currLives == 3);
 
+            //when dead
+            isAlive = false;
+            currShield = 0;
+            currHealth = 0;
+            currLives = 3;
+            Heal(10);
+
+            Debug.Assert(isAlive == false);
+            Debug.Assert(currShield == 0);
+            Debug.Assert(currHealth == 0);
+            Debug.Assert(currLives == 3);
+
             //max health
+            isAlive = true;
             currShield = 10;
             currHealth = 50;
             currLives = 3;
             Heal(60);
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 10);
             Debug.Assert(currHealth == 100);
             Debug.Assert(currLives == 3);
+
             Console.Clear();
             #endregion
 
@@ -420,24 +478,41 @@ namespace HealthSystem_2026
             #region Regen shield
 
             //shield only
+            isAlive = true;
             currShield = 10;
             currHealth = 90;
             currLives = 3;
             RegenShield(50);
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 60);
             Debug.Assert(currHealth == 90);
             Debug.Assert(currLives == 3);
 
+            //when dead
+            isAlive = false;
+            currShield = 0;
+            currHealth = 0;
+            currLives = 3;
+            RegenShield(50);
+
+            Debug.Assert(isAlive == false);
+            Debug.Assert(currShield == 0);
+            Debug.Assert(currHealth == 0);
+            Debug.Assert(currLives == 3);
+
             //max shield
+            isAlive = true;
             currShield = 90;
             currHealth = 100;
             currLives = 3;
             RegenShield(20);
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 100);
             Debug.Assert(currHealth == 100);
             Debug.Assert(currLives == 3);
+
             Console.Clear();
             #endregion
 
@@ -445,14 +520,41 @@ namespace HealthSystem_2026
             #region Revive
 
             //lives shield and health
+            isAlive = false;
             currShield = 0;
             currHealth = 0;
             currLives = 3;
             Revive();
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 100);
             Debug.Assert(currHealth == 100);
             Debug.Assert(currLives == 2);
+
+            //when alive
+            isAlive = true;
+            currShield = 100;
+            currHealth = 100;
+            currLives = 3;
+            Revive();
+
+            Debug.Assert(isAlive == true);
+            Debug.Assert(currShield == 100);
+            Debug.Assert(currHealth == 100);
+            Debug.Assert(currLives == 3);
+
+            //when lives are at 0
+            isAlive = false;
+            currShield = 0;
+            currHealth = 0;
+            currLives = 0;
+            Revive();
+
+            Debug.Assert(isAlive == false);
+            Debug.Assert(currShield == 0);
+            Debug.Assert(currHealth == 0);
+            Debug.Assert(currLives == 0);
+
             Console.Clear();
             #endregion
 
@@ -460,24 +562,41 @@ namespace HealthSystem_2026
             #region One Up
 
             //Lives only
+            isAlive = true;
             currShield = 100;
             currHealth = 100;
             currLives = 2;
             OneUp();
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 100);
             Debug.Assert(currHealth == 100);
             Debug.Assert(currLives == 3);
 
             //max OneUp
+            isAlive = true;
             currShield = 100;
             currHealth = 100;
             currLives = 3;
             OneUp();
 
+            Debug.Assert(isAlive == true);
             Debug.Assert(currShield == 100);
             Debug.Assert(currHealth == 100);
             Debug.Assert(currLives == 3);
+
+            //when at 0
+            isAlive = false;
+            currShield = 0;
+            currHealth = 0;
+            currLives = 0;
+            OneUp();
+
+            Debug.Assert(isAlive == false);
+            Debug.Assert(currShield == 0);
+            Debug.Assert(currHealth == 0);
+            Debug.Assert(currLives == 0);
+
             Console.Clear();
             #endregion
 
